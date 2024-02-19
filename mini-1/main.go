@@ -1,3 +1,9 @@
+/*
+ * author: I Komang Mardika
+ * email: komang.mardika@hotmail.com
+ * app desc: mini project 1 for Markas Bali ft Kominfo Kelas Intensif 2024
+ * first created on Monday, 19 feb 2024
+ */
 package main
 
 import (
@@ -33,9 +39,9 @@ var books = []map[string]string{
 }
 
 func main() {
+	/* call showMenu function for first time */
 	showMenu()
 }
-
 func showMenu() {
 	var menuChosen string
 
