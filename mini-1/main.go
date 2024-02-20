@@ -147,9 +147,9 @@ func addNewBook() {
 	number = number + 1
 	if number < 10 {
 		bookId = "B-000" + strconv.Itoa(number)
-	} else if number > 9 && number < 99 {
+	} else if number > 9 && number <= 99 {
 		bookId = "B-00" + strconv.Itoa(number)
-	} else if number > 99 && number < 999 {
+	} else if number > 99 && number <= 999 {
 		bookId = "B-0" + strconv.Itoa(number)
 	} else {
 		bookId = "B-" + strconv.Itoa(number)
