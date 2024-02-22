@@ -24,7 +24,8 @@ func transactionBook(action string) {
 		fmt.Print("dikembalikan : ")
 	}
 
-	_, err := fmt.Scanln(&bookId)
+	reader := bufio.NewReader(os.Stdin)
+	bookId, err := reader.ReadString('\n')
 
 	if err != nil {
 		fmt.Println("Error reading input:", err)
@@ -83,14 +84,12 @@ func showAll(status string) {
 	}
 }
 func addNewBook() {
-	var bookTitle string
 	var bookId string
 
 	fmt.Print("Masukkan Title buku baru : ")
-	_, err := fmt.Scanln(&bookTitle)
-	if err != nil {
-		fmt.Print("err")
-	}
+
+	readerTitle := bufio.NewReader(os.Stdin)
+	bookTitle, _ := readerTitle.ReadString('\n')
 
 	index := len(books) - 1
 	parts := strings.Split(books[index].Id, "-")
@@ -127,7 +126,8 @@ Simple Perpustakaan App
 	7. Keluar dari aplikasi
 `)
 	fmt.Print("Pilihan anda: ")
-	_, err := fmt.Scanln(&menuChosen)
+	reader := bufio.NewReader(os.Stdin)
+	menuChosen, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Println("Error reading input:", err)
 		return
