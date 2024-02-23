@@ -165,7 +165,7 @@ Simple Library App
 /* db seeder */
 var books = []Book{
 	{
-		Code:      "B-00001",
+		Code:      "B-0001",
 		Title:     "Harry Potter and Sorcerer's Stone",
 		Author:    "JK Rowling",
 		Publisher: "Gramedia",
@@ -173,7 +173,7 @@ var books = []Book{
 		PageTotal: 10,
 	},
 	{
-		Code:      "B-00002",
+		Code:      "B-0002",
 		Title:     "Harry Potter and Chamber of Secret",
 		Author:    "JK Rowling",
 		Publisher: "Gramedia",
@@ -181,7 +181,7 @@ var books = []Book{
 		PageTotal: 10,
 	},
 	{
-		Code:      "B-00003",
+		Code:      "B-0003",
 		Title:     "Harry Potter and Prisoner of Azkaban",
 		Author:    "JK Rowling",
 		Publisher: "Gramedia",
