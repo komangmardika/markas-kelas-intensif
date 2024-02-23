@@ -55,8 +55,12 @@ func addNewBook() {
 	var bookYear, bookPageNum int
 
 	index := len(books) - 1
-	parts := strings.Split(books[index].Code, "-")
-	bookId = generateBookCode(parts[1])
+	if index > -1 {
+		parts := strings.Split(books[index].Code, "-")
+		bookId = generateBookCode(parts[1])
+	} else {
+		bookId = "B-0001"
+	}
 
 	bookTitle = inputText("Enter new title: ")
 	bookAuthor = inputText("Enter the author: ")
