@@ -1,3 +1,9 @@
+/*
+ * author: I Komang Mardika
+ * email: komang.mardika@hotmail.com
+ * description: mini project 1 for markasbali ft kominfo golang hacker workshop
+ *
+ */
 package main
 
 import (
@@ -9,123 +15,125 @@ import (
 )
 
 type Book struct {
-	Id     string
-	Title  string
-	Status string
+	Code      string
+	Title     string
+	Author    string
+	Publisher string
+	Year      int
+	Quantity  int
+	Borrowed  int
 }
 
-func transactionBook(action string) {
-	var bookId string
-	fmt.Print("Masukkan ID buku yang ingin ")
-
-	if action == "B" {
-		fmt.Print("dipinjam : ")
-	} else {
-		fmt.Print("dikembalikan : ")
-	}
-
-	reader := bufio.NewReader(os.Stdin)
-	bookId, err := reader.ReadString('\n')
-
-	if err != nil {
-		fmt.Println("Error reading input:", err)
-		return
-	} else {
-		bookId = strings.TrimSpace(bookId)
-
-		flag := false
-		for _, book := range books {
-			if book.Id == bookId {
-				fmt.Println("buku ditemukan berikut data nya")
-				fmt.Println("Book ID: ", book.Id)
-				fmt.Println("Book Title: ", book.Title)
-				fmt.Println("status buku sudah diubah")
-				if action == "B" {
-					book.Status = "B"
-				} else {
-					book.Status = "A"
-				}
-				flag = true
-				break
-			}
-		}
-
-		if !flag {
-			confirmation()
-		} else {
-			println("buku tidak ditemukan")
-			confirmation()
-		}
-	}
-}
-func showAll(status string) {
-	var s string
+/*
+ * main functions:
+ * show all
+ * add new book
+ * delete a book
+ * edit a book
+ */
+func showAll() {
 	for i := 0; i < len(books); i++ {
-		if status == books[i].Status {
-			fmt.Printf(`
-	id: %s
-	title: %s
-`, books[i].Id, books[i].Title)
-		} else {
-			if status == "all" {
-				if books[i].Status == "A" {
-					s = "Tersedia"
-				} else {
-					s = "Dipinjam"
-				}
-				fmt.Printf(`
-	id: %s
-	title: %s
-	status: %s
-`, books[i].Id, books[i].Title, s)
-			}
-		}
-
+		fmt.Println("No.", i+1)
+		fmt.Printf(`
+	Code: %s
+	Title: %s
+	Author: %s
+	Publisher: %s
+	Year: %d
+	Quantity: %d
+`,
+			books[i].Code,
+			books[i].Title,
+			books[i].Author,
+			books[i].Publisher,
+			books[i].Year,
+			books[i].Quantity,
+		)
 	}
 }
 func addNewBook() {
-	var bookId string
-
-	fmt.Print("Masukkan Title buku baru : ")
-
-	readerTitle := bufio.NewReader(os.Stdin)
-	bookTitle, _ := readerTitle.ReadString('\n')
+	var bookId, bookTitle, bookAuthor, bookPublisher string
+	var bookYear, bookQuantity int
 
 	index := len(books) - 1
-	parts := strings.Split(books[index].Id, "-")
-	number, _ := strconv.Atoi(parts[1])
-	number = number + 1
+	parts := strings.Split(books[index].Code, "-")
+	bookId = generateBookCode(parts[1])
 
-	if number < 10 {
-		bookId = "B-000" + strconv.Itoa(number)
-	} else if number > 9 && number <= 99 {
-		bookId = "B-00" + strconv.Itoa(number)
-	} else if number > 99 && number <= 999 {
-		bookId = "B-0" + strconv.Itoa(number)
-	} else {
-		bookId = "B-" + strconv.Itoa(number)
+	bookTitle = inputText("Enter new title: ")
+	bookAuthor = inputText("Enter the author: ")
+	bookPublisher = inputText("Enter the publisher: ")
+	bookYear, err := inputInt("Enter Publish Year: ")
+	if err != nil {
+		fmt.Print("You are not entering number")
+		return
 	}
 
-	books = append(books, Book{Id: bookId, Title: bookTitle, Status: "A"})
-	fmt.Println("Buku berhasil ditambahkan")
+	bookQuantity, err = inputInt("Enter Quantity of Book: ")
+	if err != nil {
+		fmt.Print("You are not entering number")
+		return
+	}
+
+	books = append(books, Book{
+		Code:      bookId,
+		Title:     bookTitle,
+		Author:    bookAuthor,
+		Publisher: bookPublisher,
+		Year:      bookYear,
+		Quantity:  bookQuantity,
+	})
+	fmt.Println("Book has been added successfully")
 	confirmation()
 }
+func deleteBook() {
+	bookCode := inputText("Enter book code you want to delete: ")
+	index := findBookIndexByCode(bookCode)
+	if index > -1 {
+		books = append(books[:index], books[index+1:]...)
+	} else {
+		fmt.Printf("book with code %s not found \n", bookCode)
+		return
+	}
+	clearScreen()
+	fmt.Println("New Books List after Deletion")
+	showAll()
+
+}
+func editBook() {
+	bookCode := inputText("Enter book code you want to edit: ")
+	index := findBookIndexByCode(bookCode)
+	if index > -1 {
+		fmt.Println("Book Code: ", books[index].Code)
+		books[index].Title = inputText("Enter new Title: ")
+		books[index].Author = inputText("Enter new Author: ")
+		books[index].Publisher = inputText("Enter new Publisher: ")
+		books[index].Year, _ = inputInt("Enter new Year: ")
+		books[index].Quantity, _ = inputInt("Enter new Quantity: ")
+
+	} else {
+		fmt.Printf("book with code %s not found \n", bookCode)
+		return
+	}
+	clearScreen()
+	fmt.Println("New Books List after Alteration")
+	showAll()
+}
+
+/* menu */
 func menu() {
 	var menuChosen string
 
 	clearScreen()
 
 	fmt.Printf(`
-Simple Perpustakaan App 
-	1. lihat buku tersedia
-	2. lihat buku dipinjam
-	3. lihat seluruh buku
-	4. menambah buku
-	5. pinjam buku
-	6. kembalikan buku
-	7. Keluar dari aplikasi
+Simple Library App 
+	1. show books
+	2. add a new book
+	3. delete a book
+	4. edit a book
+	5. Quit
 `)
-	fmt.Print("Pilihan anda: ")
+	fmt.Print("Please choose your option(1/2/3/4): ")
 	reader := bufio.NewReader(os.Stdin)
 	menuChosen, err := reader.ReadString('\n')
 	if err != nil {
@@ -137,37 +145,73 @@ Simple Perpustakaan App
 
 		switch menuChosen {
 		case "1":
-			showAll("A")
+			showAll()
 		case "2":
-			showAll("B")
-		case "3":
-			showAll("all")
-		case "4":
 			addNewBook()
+		case "3":
+			deleteBook()
+		case "4":
+			editBook()
 		case "5":
-			transactionBook("B")
-		case "6":
-			transactionBook("R")
-		case "7":
-			fmt.Println("Terima kasih sudah menggunakan aplikasi ini")
-			return
+			fmt.Println("Thanks for using Simple Library App")
+			os.Exit(0)
 		default:
-			fmt.Print("Anda tidak memilih menu yang tepat, ")
+			fmt.Print("You did not choose the right option, ")
 		}
 
 		confirmation()
 	}
 }
+
+/* db */
+var books = []Book{
+	{
+		Code:      "B-00001",
+		Title:     "Harry Potter and Sorcerer's Stone",
+		Author:    "JK Rowling",
+		Publisher: "Gramedia",
+		Year:      2000,
+		Quantity:  10,
+	},
+	{
+		Code:      "B-00002",
+		Title:     "Harry Potter and Chamber of Secret",
+		Author:    "JK Rowling",
+		Publisher: "Gramedia",
+		Year:      2001,
+		Quantity:  10,
+	},
+	{
+		Code:      "B-00003",
+		Title:     "Harry Potter and Prisoner of Azkaban",
+		Author:    "JK Rowling",
+		Publisher: "Gramedia",
+		Year:      2002,
+		Quantity:  10,
+	},
+}
+
+/* runner */
+func main() {
+	menu()
+}
+
+/*
+ * utilities:
+ * clear console screen
+ * confirmation for repeat
+ * detect keypress of confirmation
+ */
+func clearScreen() {
+	fmt.Print("\033[H\033[2J")
+}
 func confirmation() {
 	if keyPress() {
 		menu()
-	} else {
-		fmt.Println("Terima kasih sudah menggunakan aplikasi ini")
-		return
 	}
 }
 func keyPress() bool {
-	fmt.Println("tekan y untuk mengulang")
+	fmt.Print("Press y to return to the menu ")
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		key, _, _ := reader.ReadRune()
@@ -179,29 +223,52 @@ func keyPress() bool {
 	}
 }
 
-var books = []Book{
-	{
-		Id:     "B-00001",
-		Title:  "Harry Potter and Sorcerer's Stone",
-		Status: "A",
-	},
-	{
-		Id:     "B-00002",
-		Title:  "Harry Potter and Chamber of Secret",
-		Status: "A",
-	},
-	{
-		Id:     "B-00003",
-		Title:  "Harry Potter and Prisoner of Azkaban",
-		Status: "A",
-	},
-}
+/*
+ * helpers:
+ * input text
+ * input int
+ * find book index by code
+ * generate book code
+ */
+func inputText(text string) string {
+	var typedText string
+	fmt.Print(text)
 
-func main() {
-	// seed books
-	menu()
+	readerTitle := bufio.NewReader(os.Stdin)
+	typedText, _ = readerTitle.ReadString('\n')
+	return strings.TrimSpace(typedText)
 }
+func inputInt(text string) (int, any) {
+	var typedText string
+	fmt.Print(text)
 
-func clearScreen() {
-	fmt.Print("\033[H\033[2J")
+	readerTitle := bufio.NewReader(os.Stdin)
+	typedText, _ = readerTitle.ReadString('\n')
+	num, err := strconv.Atoi(strings.TrimSpace(typedText))
+
+	return num, err
+}
+func findBookIndexByCode(code string) int {
+	index := -1
+	for i := 0; i < len(books); i++ {
+		if code == books[i].Code {
+			index = i
+			break
+		}
+	}
+	return index
+}
+func generateBookCode(lastCode string) string {
+	number, _ := strconv.Atoi(lastCode)
+	number = number + 1
+
+	if number < 10 {
+		return "B-000" + strconv.Itoa(number)
+	} else if number > 9 && number <= 99 {
+		return "B-00" + strconv.Itoa(number)
+	} else if number > 99 && number <= 999 {
+		return "B-0" + strconv.Itoa(number)
+	} else {
+		return "B-" + strconv.Itoa(number)
+	}
 }
