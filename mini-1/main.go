@@ -20,8 +20,7 @@ type Book struct {
 	Author    string
 	Publisher string
 	Year      int
-	Quantity  int
-	Borrowed  int
+	PageTotal int
 }
 
 /*
@@ -39,21 +38,21 @@ func showAll() {
 	Title: %s
 	Author: %s
 	Publisher: %s
-	Year: %d
-	Quantity: %d
+	Publication Year: %d
+	Number of Pages: %d
 `,
 			books[i].Code,
 			books[i].Title,
 			books[i].Author,
 			books[i].Publisher,
 			books[i].Year,
-			books[i].Quantity,
+			books[i].PageTotal,
 		)
 	}
 }
 func addNewBook() {
 	var bookId, bookTitle, bookAuthor, bookPublisher string
-	var bookYear, bookQuantity int
+	var bookYear, bookPageNum int
 
 	index := len(books) - 1
 	parts := strings.Split(books[index].Code, "-")
@@ -62,13 +61,13 @@ func addNewBook() {
 	bookTitle = inputText("Enter new title: ")
 	bookAuthor = inputText("Enter the author: ")
 	bookPublisher = inputText("Enter the publisher: ")
-	bookYear, err := inputInt("Enter Publish Year: ")
+	bookYear, err := inputInt("Enter Publication Year: ")
 	if err != nil {
 		fmt.Print("You are not entering number")
 		return
 	}
 
-	bookQuantity, err = inputInt("Enter Quantity of Book: ")
+	bookPageNum, err = inputInt("Enter Book Total Page: ")
 	if err != nil {
 		fmt.Print("You are not entering number")
 		return
@@ -80,7 +79,7 @@ func addNewBook() {
 		Author:    bookAuthor,
 		Publisher: bookPublisher,
 		Year:      bookYear,
-		Quantity:  bookQuantity,
+		PageTotal: bookPageNum,
 	})
 	fmt.Println("Book has been added successfully")
 	confirmation()
@@ -108,7 +107,7 @@ func editBook() {
 		books[index].Author = inputText("Enter new Author: ")
 		books[index].Publisher = inputText("Enter new Publisher: ")
 		books[index].Year, _ = inputInt("Enter new Year: ")
-		books[index].Quantity, _ = inputInt("Enter new Quantity: ")
+		books[index].PageTotal, _ = inputInt("Enter new Total Page: ")
 
 	} else {
 		fmt.Printf("book with code %s not found \n", bookCode)
@@ -163,7 +162,7 @@ Simple Library App
 	}
 }
 
-/* db */
+/* db seeder */
 var books = []Book{
 	{
 		Code:      "B-00001",
@@ -171,7 +170,7 @@ var books = []Book{
 		Author:    "JK Rowling",
 		Publisher: "Gramedia",
 		Year:      2000,
-		Quantity:  10,
+		PageTotal: 10,
 	},
 	{
 		Code:      "B-00002",
@@ -179,7 +178,7 @@ var books = []Book{
 		Author:    "JK Rowling",
 		Publisher: "Gramedia",
 		Year:      2001,
-		Quantity:  10,
+		PageTotal: 10,
 	},
 	{
 		Code:      "B-00003",
@@ -187,7 +186,7 @@ var books = []Book{
 		Author:    "JK Rowling",
 		Publisher: "Gramedia",
 		Year:      2002,
-		Quantity:  10,
+		PageTotal: 10,
 	},
 }
 
