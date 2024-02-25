@@ -65,17 +65,8 @@ func addNewBook() {
 	bookTitle = inputText("Enter new title: ")
 	bookAuthor = inputText("Enter the author: ")
 	bookPublisher = inputText("Enter the publisher: ")
-	bookYear, err := inputInt("Enter Publication Year: ")
-	if err != nil {
-		fmt.Print("You are not entering number")
-		return
-	}
-
-	bookPageNum, err = inputInt("Enter Book Total Page: ")
-	if err != nil {
-		fmt.Print("You are not entering number")
-		return
-	}
+	bookYear = inputInt("Enter Publication Year: ")
+	bookPageNum = inputInt("Enter Book Total Page: ")
 
 	books = append(books, Book{
 		Code:      bookId,
@@ -110,8 +101,8 @@ func editBook() {
 		books[index].Title = inputText("Enter new Title: ")
 		books[index].Author = inputText("Enter new Author: ")
 		books[index].Publisher = inputText("Enter new Publisher: ")
-		books[index].Year, _ = inputInt("Enter new Year: ")
-		books[index].PageTotal, _ = inputInt("Enter new Total Page: ")
+		books[index].Year = inputInt("Enter new Year: ")
+		books[index].PageTotal = inputInt("Enter new Total Page: ")
 
 	} else {
 		fmt.Printf("book with code %s not found \n", bookCode)
@@ -241,15 +232,22 @@ func inputText(text string) string {
 	typedText, _ = readerTitle.ReadString('\n')
 	return strings.TrimSpace(typedText)
 }
-func inputInt(text string) (int, any) {
+func inputInt(text string) int {
 	var typedText string
-	fmt.Print(text)
+	var number int
+	for {
+		typedText = inputText(text)
+		num, err := strconv.Atoi(strings.TrimSpace(typedText))
+		if err != nil {
+			fmt.Println("you are not entering number")
+			continue
+		} else {
+			number = num
+			break
+		}
+	}
 
-	readerTitle := bufio.NewReader(os.Stdin)
-	typedText, _ = readerTitle.ReadString('\n')
-	num, err := strconv.Atoi(strings.TrimSpace(typedText))
-
-	return num, err
+	return number
 }
 func findBookIndexByCode(code string) int {
 	index := -1
