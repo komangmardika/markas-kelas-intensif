@@ -56,8 +56,7 @@ func addNewBook() {
 
 	index := len(books) - 1
 	if index > -1 {
-		parts := strings.Split(books[index].Code, "-")
-		bookId = generateBookCode(parts[1])
+		bookId = generateBookCode(books[index].Code)
 	} else {
 		bookId = "B-0001"
 	}
@@ -85,7 +84,7 @@ func deleteBook() {
 	if index > -1 {
 		books = append(books[:index], books[index+1:]...)
 	} else {
-		fmt.Printf("book with code %s not found \n", bookCode)
+		fmt.Printf("book with code %s is not found \n", bookCode)
 		return
 	}
 	clearScreen()
@@ -127,34 +126,25 @@ Simple Library App
 	4. edit a book
 	5. Quit
 `)
-	fmt.Print("Please choose your option(1/2/3/4): ")
-	reader := bufio.NewReader(os.Stdin)
-	menuChosen, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println("Error reading input:", err)
-		return
-	} else {
+	menuChosen = inputText("Please choose your option(1/2/3/4): ")
 
-		menuChosen = strings.TrimSpace(menuChosen)
-
-		switch menuChosen {
-		case "1":
-			showAll()
-		case "2":
-			addNewBook()
-		case "3":
-			deleteBook()
-		case "4":
-			editBook()
-		case "5":
-			fmt.Println("Thanks for using Simple Library App")
-			os.Exit(0)
-		default:
-			fmt.Print("You did not choose the right option, ")
-		}
-
-		confirmation()
+	switch menuChosen {
+	case "1":
+		showAll()
+	case "2":
+		addNewBook()
+	case "3":
+		deleteBook()
+	case "4":
+		editBook()
+	case "5":
+		fmt.Println("Thanks for using Simple Library App")
+		os.Exit(0)
+	default:
+		fmt.Print("You did not choose the right option, ")
 	}
+
+	confirmation()
 }
 
 /* db seeder */
@@ -260,7 +250,8 @@ func findBookIndexByCode(code string) int {
 	return index
 }
 func generateBookCode(lastCode string) string {
-	number, _ := strconv.Atoi(lastCode)
+	parts := strings.Split(lastCode, "-")
+	number, _ := strconv.Atoi(parts[1])
 	number = number + 1
 
 	if number < 10 {
