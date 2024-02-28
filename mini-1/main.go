@@ -54,13 +54,19 @@ func addNewBook() {
 	var bookId, bookTitle, bookAuthor, bookPublisher string
 	var bookYear, bookPageNum int
 
-	index := len(books) - 1
-	if index > -1 {
-		bookId = generateBookCode(books[index].Code)
-	} else {
-		bookId = "B-0001"
-	}
+	// update: the rule is book code is manually input
+	//         if you prefer auto generate book code
 
+	/*
+		index := len(books) - 1
+		if index > -1 {
+			bookId = generateBookCode(books[index].Code)
+		} else {
+			bookId = "B-0001"
+		}
+	*/
+	
+	bookId = inputText("Enter new Book Code: ")
 	bookTitle = inputText("Enter new title: ")
 	bookAuthor = inputText("Enter the author: ")
 	bookPublisher = inputText("Enter the publisher: ")
