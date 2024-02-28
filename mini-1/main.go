@@ -55,7 +55,7 @@ func addNewBook() {
 	var bookYear, bookPageNum int
 
 	// update: the rule is book code is manually input
-	//         if you prefer auto generate book code
+	//         if you prefer auto generate book code uncomment comment below
 
 	/*
 		index := len(books) - 1
@@ -65,7 +65,7 @@ func addNewBook() {
 			bookId = "B-0001"
 		}
 	*/
-	
+
 	bookId = inputText("Enter new Book Code: ")
 	bookTitle = inputText("Enter new title: ")
 	bookAuthor = inputText("Enter the author: ")
