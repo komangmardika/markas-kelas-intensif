@@ -57,7 +57,6 @@ func addNewBook() {
 	for {
 		bookId = inputText("Enter new Book Code: ")
 		res := findBookIndexByCode(bookId)
-		fmt.Println(res)
 
 		if res == -1 {
 			break
