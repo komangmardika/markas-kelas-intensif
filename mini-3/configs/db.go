@@ -42,8 +42,6 @@ func OpenDB(silentLogger bool) {
 		DB: MysqlConn,
 	}
 
-	Mysql.DB.Logger.LogMode(logger.Silent)
-	MysqlConn.Logger.LogMode(logger.Silent)
 	err = autoMigrate(Mysql.DB)
 	if err != nil {
 		return
