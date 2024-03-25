@@ -117,9 +117,9 @@ func EditBook() {
 		fmt.Println("ISBN ditemukan! : ", b.ISBN)
 		b.Judul = helpers.InputText("Masukkan judul buku baru: ")
 		b.Penulis = helpers.InputText("Masukkan penulis buku baru: ")
+		b.Gambar = helpers.InputText("Masukkan file gambar baru: ")
 		b.Tahun = helpers.InputUint("Masukkan tahun terbit buku baru: ")
 		b.Stok = helpers.InputUint("Masukkan stok buku baru: ")
-		b.Gambar = helpers.InputText("Masukkan file gambar baru: ")
 
 		err := b.Update(configs.Mysql.DB)
 		if err != nil {
@@ -225,9 +225,7 @@ func parseRowToBook(row []string) models.Book {
 	tahun, _ := strconv.ParseUint(row[3], 10, 64)
 	stok, _ := strconv.ParseUint(row[6], 10, 64)
 	id, _ := strconv.ParseUint(row[0], 10, 64)
-	if row[0] == "1" {
-		println(id, row[0], uint(id))
-	}
+
 	return models.Book{
 		Model:   models.Model{ID: uint(id)},
 		ISBN:    row[1],

@@ -1,5 +1,11 @@
 package main
 
+/*
+ * author: I Komang Mardika
+ * email: komang.mardika@hotmail.com
+ * description: mini project 3 for markasbali ft kominfo golang hacker workshop
+ *
+ */
 import (
 	"fmt"
 	"github.com/joho/godotenv"
